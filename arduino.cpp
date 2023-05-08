@@ -24,23 +24,21 @@ void loop() {
   int cap1 = cs1.capacitiveSensor(sensitivity);
   int cap2 = cs2.capacitiveSensor(sensitivity);
   int cap3 = cs3.capacitiveSensor(sensitivity);
-  if (pcap1 - cap1 > 500) {
-    digitalWrite(A0, HIGH);
-    Serial.println("High1");
+  Serial.println(cap1);
+  if (pcap1 < 500 && cap1 < 500) {
+    digitalWrite(A0, LOW);
   } else {
-    digitalWrite(A0, LOW);  
+    digitalWrite(A0, HIGH);  
   }
-  if (pcap2 - cap2 > 500) {
-    digitalWrite(A1, HIGH);
-    Serial.println("High2");
+  if (pcap2 < 500 && cap2 < 500) {
+    digitalWrite(A1, LOW);
   } else {
-    digitalWrite(A1, LOW);  
- }  
- if (pcap3 - cap3 > 500) {
-  digitalWrite(A2, HIGH);
-  Serial.println("High3");
+    digitalWrite(A1, HIGH);  
+  }  
+ if (pcap3 < 500 && cap3 < 500) {
+  digitalWrite(A2, LOW);
  } else {
-  digitalWrite(A2, LOW);  
+  digitalWrite(A2, HIGH);  
  }
  pcap1 = cap1;
  pcap2 = cap2;
