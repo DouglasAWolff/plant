@@ -7,11 +7,17 @@ from pyo import *
 #                               pyo setup                                      #
 ################################################################################
 
-s = Server().boot()
+s = Server()
+s.setInOutDevice(9)
+s.boot()
 f = Adsr(attack=0.1, decay=1, sustain=0, release=0, dur=1.5, mul=.5)
 a = Sine(freq=340, mul=f).out()
 s.start()
 
+f.play()
+time.sleep(0.5)
+f.play()
+time.sleep(0.5)
 ################################################################################
 #                            variables setup                                   #
 ################################################################################
@@ -108,3 +114,4 @@ while True:
 
     if is_touch(2):
         plant2.play()
+
