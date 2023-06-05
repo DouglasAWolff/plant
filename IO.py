@@ -1,84 +1,110 @@
 import serial
 import random
 import time
-from pythonosc import udp_client
+from pyo import * 
 
-client = udp_client.SimpleUDPClient('127.0.0.1', 4560)
+################################################################################
+#                               pyo setup                                      #
+################################################################################
 
-inlen = 10
-numvar = 3
+s = Server().boot()
+f = Adsr(attack=0.1, decay=1, sustain=0, release=0, dur=1.5, mul=.5)
+a = Sine(freq=340, mul=f).out()
+s.start()
 
-inputs = [[x for x in range(numvar)] for i in range(inlen)]
-
-touch = [False for i in range(numvar)]
-
-def is_touch(sens):
-    if sum(inputs[-2:][sens])/2 > 500:
-        return True
-    else:
-        return False
-
-def is_new_touch(sens):
-    if touch[sens]:
-        touch[sens] = is_touch(sens) 
-        return False
-    else:
-        touch[sens] = is_touch(sens)
-        return touch[sens]
-
-while True:
-    with serial.Serial('/dev/ttyS0', '115200') as ser: #add timeout later
-        ser.write(1)
-        inp = ser.readline().decode('utf-8')
-        try:
-            inputs.append(eval(inp[:-2]))
-        except:
-            print(f"error happened evaluating this --> {inp}")
-            time.sleep(10)
-        inputs.pop(0)
-    
-    if is_new_touch(0):
-        client.send_message(f"/pitch1", random.randint(60,65))
-
-import serial
-import random
-import time
-from pythonosc import udp_client
-
-client = udp_client.SimpleUDPClient('127.0.0.1', 4560)
+################################################################################
+#                            variables setup                                   #
+################################################################################
 
 inlen = 10
 numvar = 3
 
 inputs = [[x for x in range(numvar)] for i in range(inlen)]
 
-touch = [False for i in range(numvar)]
+thres = [20, 20, 20]
+
+################################################################################
+#                        classes/functions setup                               #
+################################################################################
+
+class Plant():
+    def __init__(self):
+        self.thresh = 40
+       
+
+class Plant1(Plant):
+    def __init__(self):
+        self.duration = 0.3
+        self.semi_intervals = [2.0**(1/12),1/(2.0**(1/12))]
+        self.adsr = Adsr(attack=0.1, decay=0.3, sustain=1, release=.9, dur=0.9, mul=.5)
+        self.synth = SuperSaw(freq=340, mul=self.adsr).out()
+        self.last_trig = time.perf_counter()
+
+    def play(self):
+        if time.perf_counter() - self.last_trig > self.duration:
+            self.synth.freq = self.synth.freq * random.choice(self.semi_intervals)
+            self.adsr.play()
+            self.last_trig = time.perf_counter()
 
 def is_touch(sens):
-    if sum(inputs[-2:][sens])/2 > 500:
+    if inputs[-1][sens] > thres[sens]:
         return True
     else:
         return False
 
-def is_new_touch(sens):
-    if touch[sens]:
-        touch[sens] = is_touch(sens) 
-        return False
+
+
+class Plant2(Plant):
+    def __init__(self):
+        self.duration = 1
+        self.semi_intervals = [2.0**(1/12),1/(2.0**(1/12))]
+        self.adsr = Adsr(attack=0.1, decay=0.3, sustain=1, release=.9, dur=self.duration, mul=0.7)
+        self.mod = Sine(freq=6, mul=50)
+        self.synth = Sine(freq= self.mod + 320, mul=self.adsr).out()
+        self.last_trig = time.perf_counter()
+
+    def play(self):
+        if time.perf_counter() - self.last_trig > self.duration:
+            self.synth.freq = self.synth.freq * random.choice(self.semi_intervals)
+            self.adsr.play()
+            self.last_trig = time.perf_counter()
+
+    
+def is_touch(sens):
+    if inputs[-1][sens] > thres[sens]:
+        return True
     else:
-        touch[sens] = is_touch(sens)
-        return touch[sens]
+        return False
+
+
+plant1 = Plant1()
+plant2 = Plant2()
+
+################################################################################
+#                                main loop                                     #
+################################################################################
 
 while True:
-    with serial.Serial('/dev/ttyS0', '115200') as ser: #add timeout later
+    with serial.Serial('/dev/ttyS0', '115200', timeout=0.5) as ser: #add timeout later
         ser.write(1)
-        inp = ser.readline().decode('utf-8')
-        try:
-            inputs.append(eval(inp[:-2]))
-        except:
-            print(f"error happened evaluating this --> {inp}")
-            time.sleep(10)
-        inputs.pop(0)
-    
-    if is_new_touch(0):
-        client.send_message(f"/pitch1", random.randint(60,65))
+        inp = ser.readline().decode('utf-8').replace("\0", "")
+##        try:
+        if True:
+            if len(inp) > 1:
+                inputs.append(eval(inp[:-2]))
+                inputs.pop(0)
+#        except:
+#            print(f"error happened evaluating this --> {inp}")
 
+    
+
+    if is_touch(0):
+        print("touch")
+        a.freq = a.freq * random.choice([2.0**(1/12),1/(2.0**(1/12))])
+        f.play()
+
+    if is_touch(1):
+        plant1.play()
+
+    if is_touch(2):
+        plant2.play()
