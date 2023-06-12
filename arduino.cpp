@@ -13,14 +13,13 @@ CapacitiveSensor cs3   = CapacitiveSensor(12, 11);
 
 void setup() {
   Serial.begin(115200);
-  Serial.println(F("Initialize System"));
+  
 }
 
 void loop() {
   int cap1 = cs1.capacitiveSensor(sensitivity);
   int cap2 = cs2.capacitiveSensor(sensitivity);
   int cap3 = cs3.capacitiveSensor(sensitivity);
-
   if (cap1 > 100) {
     Serial.println(1);
   }
@@ -28,8 +27,7 @@ void loop() {
     Serial.println(2);
   }
   if (cap3 > 100) {
+    //Serial.println(cap3);
     Serial.println(3);
   }
-  
-  Serial.println(0);
 }
