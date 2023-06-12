@@ -21,15 +21,15 @@ void loop() {
   int cap2 = cs2.capacitiveSensor(sensitivity);
   int cap3 = cs3.capacitiveSensor(sensitivity);
 
-  if (cap1 > 60) {
+  if (cap1 > 100) {
     Serial.println(1);
   }
-  if (cap2 > 60) {
-    Serial.prinln(2);
+  if (cap2 > 100) {
+    Serial.println(2);
   }
-  if (cap3 > 60) {
-    Serial.prinln(3);
+  if (cap3 > 100) {
+    Serial.println(3);
   }
   
-  Serial.prinln(0)
+  Serial.println(0);
 }
