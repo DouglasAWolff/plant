@@ -6,6 +6,9 @@ const int sensitivity   = 10;
 int pcap1 = 0;
 int pcap2 = 0;
 int pcap3 = 0;
+int acap1 = 0;
+int acap2 = 0;
+int acap3 = 0;
 
 CapacitiveSensor cs1   = CapacitiveSensor(2, 3);
 CapacitiveSensor cs2   = CapacitiveSensor(2, 9);
@@ -27,15 +30,31 @@ void loop() {
   // Serial.println(cap3);
 
 
-  if (abs(pcap1 - cap1)> ((cap1 + 2)*5)) {
+  // if (abs(pcap1 - cap1)> ((cap1 + 2)*3)) {
+  //   Serial.println(1);
+  // }
+  // if (abs(pcap2 - cap2)> ((cap2 + 2)*3)) {
+  //   Serial.println(2);
+  // }
+  // if (abs(pcap3 - cap3)> ((cap3 + 2)*3)) {
+  //   Serial.println(3);
+  // }
+
+  if (cap1 - acap1 >  50) {
     Serial.println(1);
   }
-  if (abs(pcap2 - cap2)> ((cap2 + 2)*5)) {
+  if (cap2 - acap2 >  50) {
     Serial.println(2);
   }
-  if (abs(pcap3 - cap3)> ((cap3 + 2)*5)) {
+  if (cap3 - acap3 >  50) {
     Serial.println(3);
   }
+
+  acap1 = acap1 + 1/2 *(cap1 - acap1);
+  acap2 = acap2 + 1/2 *(cap2 - acap2);
+  acap3 = acap3 + 1/2 *(cap3 - acap3);
+
+  Serial.println(acap1);
 
   pcap1 = cap1;
   pcap2 = cap2;
