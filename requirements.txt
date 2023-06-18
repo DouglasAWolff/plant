@@ -1,0 +1,3 @@
+
+pyo==1.0.5      # http://ajaxsoundstudio.com/software/pyo/
+pyserial==3.5   # https://pyserial.readthedocs.io/en/latest/index.html
