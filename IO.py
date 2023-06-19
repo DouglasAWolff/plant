@@ -4,7 +4,7 @@ import time
 from pyo import * 
 import traceback
 
-from plant_lib import Plant1, Plant2, PlantServer
+from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5
 
 ################################################################################
 #                               pyo setup                                      #
@@ -18,8 +18,9 @@ s = PlantServer(duplex=0, nchnls=2)
 
 plant1 = Plant1()
 plant2 = Plant2()
-
-
+tritone_plant3 = TritonePlant3()
+sample_plant4 = SamplePlant4()
+sample_plant5 = SamplePlant5()
 
 
 ################################################################################
@@ -46,17 +47,16 @@ try:
             print(traceback.format_exc())
             time.sleep(0.05)
         if not inp == 0:
-            if inp == 1 and zcount[0] - time.perf_counter() < -0.3:
-                s.update_frequency(random.choice([2.0**(1/12),1/(2.0**(1/12))]))
-                s.play_frequency()
+            if inp == 1:
+                plant1.play()
                 zcount[0] = 0
 
-            elif inp == 2 and zcount[1] - time.perf_counter() < -0.3:
-                plant1.play()
+            elif inp == 2:
+                plant2.play()
                 zcount[1] = 0
 
-            elif inp == 3 and zcount[2] - time.perf_counter() < -0.3:
-                plant2.play()
+            elif inp == 3:
+                tritone_plant3.play()
                 zcount[2] = 0
 
         inp1 = 0
@@ -71,16 +71,15 @@ try:
             print(traceback.format_exc())
             time.sleep(0.05)
         if not inp1 == 0:
-            if inp1 == 4 and zcount[3] - time.perf_counter() < -0.3:
-                s.update_frequency(random.choice([2.0**(1/12),1/(2.0**(1/12))]))
-                s.play_frequency()
+            if inp1 == 4:
+                sample_plant4.play()
                 zcount[3] = 0
 
-            elif inp1 == 5 and zcount[4] - time.perf_counter() < -0.3:
-                plant1.play()
+            elif inp1 == 5:
+                sample_plant5.play()
                 zcount[4] = 0
 
-            elif inp1 == 6 and zcount[5] - time.perf_counter() < -0.3:
+            elif inp1 == 6:
                 plant2.play()
                 zcount[5] = 0
 
