@@ -5,12 +5,12 @@ class PlantServer(Server):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print("PlantServer init")
-        print(pa_get_output_devices())
+        print(pa_get_default_devices_from_host('core audio'))
         self.f = None
         self.a = None
         # # pa_get_output_devices()[0].index('default'))
         # macbook pro speakers
-        self.setInOutDevice(5)
+        self.setInOutDevice((1, 2))
         self.boot()
         self.start()
         self.setup_plant_sounds()
