@@ -1,10 +1,13 @@
-import serial
-import random
-import time
-from pyo import *
 import traceback
+from os import environ as env
+
+import serial
+from dotenv import load_dotenv
+from pyo import *
 
 from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5
+
+load_dotenv()  # take environment variables from .env.
 
 ################################################################################
 #                               pyo setup                                      #
@@ -28,11 +31,19 @@ sample_plant5 = SamplePlant5()
 ################################################################################
 zcount = [time.perf_counter() for _ in range(6)]
 
-ser = serial.Serial('/tmp/plant_simulator_S0', '115200', timeout=0.5)
-ser1 = serial.Serial('/tmp/plant_simulator_ACM1', '115200', timeout=0.5)
+ser_port = env.get('SERIAL_PORT', '/dev/ttyS0')
+ser_baudrate = env.get('SERIAL_BAUDRATE', 115200)
+ser_timeout = env.get('SERIAL_TIMEOUT', 0.5)
 
-# ser = serial.Serial('/dev/ttyS0', '115200', timeout=0.5)
-# ser1 = serial.Serial('/dev/ttyACM1', '115200', timeout=0.5)
+ser1_port = env.get('SERIAL1_PORT', '/dev/ttyACM1')
+ser1_baudrate = env.get('SERIAL1_BAUDRATE', 115200)
+ser1_timeout = env.get('SERIAL1_TIMEOUT', 0.5)
+
+# TODO: check ser_baudrate and ser_timeout are int and float and not strings
+
+ser = serial.Serial(ser_port, ser_baudrate, timeout=ser_timeout)
+ser1 = serial.Serial(ser1_port, ser1_baudrate, timeout=ser1_timeout)
+
 try:
     while True:
         inp = 0

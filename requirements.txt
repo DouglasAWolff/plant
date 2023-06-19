@@ -5,3 +5,5 @@ pyo==1.0.5      # http://ajaxsoundstudio.com/software/pyo/
 # pip~=22.0.4
 pyserial~=3.5
 # setuptools~=56.0.0
+
+python-dotenv==1.0.0
