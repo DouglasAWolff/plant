@@ -27,4 +27,6 @@ else:
 cmd += '\n'
 s = serial.serial_for_url(addr)
 s.write(cmd.encode())
-print(s.readline())
+# print(s.readline())
+s.close()
+exit()
