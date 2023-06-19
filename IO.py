@@ -1,7 +1,7 @@
 import serial
 import random
 import time
-from pyo import * 
+from pyo import *
 import traceback
 
 from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5
@@ -26,7 +26,7 @@ sample_plant5 = SamplePlant5()
 ################################################################################
 #                                main loop                                     #
 ################################################################################
-zcount = [time.perf_counter() for i in range(6)]
+zcount = [time.perf_counter() for _ in range(6)]
 
 ser = serial.Serial('/tmp/plant_simulator_S0', '115200', timeout=0.5)
 ser1 = serial.Serial('/tmp/plant_simulator_ACM1', '115200', timeout=0.5)
@@ -41,23 +41,22 @@ try:
             preinp = ppreinp.replace("\0", "").replace("\n", "").replace("\r", "")
             if len(preinp) > 0:
                 inp = int(preinp)
-                
+
             ser.reset_input_buffer()
         except Exception:
             print(traceback.format_exc())
             time.sleep(0.05)
-        if not inp == 0:
-            if inp == 1:
-                plant1.play()
-                zcount[0] = 0
+        if inp == 1:
+            plant1.play()
+            zcount[0] = 0
 
-            elif inp == 2:
-                plant2.play()
-                zcount[1] = 0
+        elif inp == 2:
+            plant2.play()
+            zcount[1] = 0
 
-            elif inp == 3:
-                tritone_plant3.play()
-                zcount[2] = 0
+        elif inp == 3:
+            tritone_plant3.play()
+            zcount[2] = 0
 
         inp1 = 0
         try:
@@ -70,18 +69,17 @@ try:
         except Exception:
             print(traceback.format_exc())
             time.sleep(0.05)
-        if not inp1 == 0:
-            if inp1 == 4:
-                sample_plant4.play()
-                zcount[3] = 0
+        if inp1 == 4:
+            sample_plant4.play()
+            zcount[3] = 0
 
-            elif inp1 == 5:
-                sample_plant5.play()
-                zcount[4] = 0
+        elif inp1 == 5:
+            sample_plant5.play()
+            zcount[4] = 0
 
-            elif inp1 == 6:
-                plant2.play()
-                zcount[5] = 0
+        elif inp1 == 6:
+            plant2.play()
+            zcount[5] = 0
 
 finally:
     ser.close()

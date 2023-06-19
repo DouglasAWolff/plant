@@ -16,12 +16,8 @@ class Plant:
         self.lower = 100
         self.upper = 1300
 
-
     def is_touch(self, sens):
-        if inputs[-1][sens] > thres[sens]:
-            return True
-        else:
-            return False
+        return inputs[-1][sens] > thres[sens]
 
     def change_pitch(self, semitones):
         if self.pitch > self.upper:
@@ -68,11 +64,12 @@ class Plant2(Plant):
             self.adsr.play()
             self.last_trig = time.perf_counter()
 
+
 class TritonePlant3(Plant):
     def __init__(self):
         super().__init__()
         self.duration = 1
-        self.invervals = [6 for i in range(3)] + [1, 3]
+        self.invervals = [6 for _ in range(3)] + [1, 3]
         self.adsr = Adsr(attack=0.1, decay=0.3, sustain=1, release=.9, dur=self.duration, mul=0.7)
         self.mod = Sine(freq=6, mul=50)
         self.synth = Sine(freq=self.mod + 320, mul=self.adsr).out()
@@ -86,12 +83,14 @@ class TritonePlant3(Plant):
             self.adsr.play()
             self.last_trig = time.perf_counter()
 
-class SamplePlant4():
+
+class SamplePlant4(Plant):
     def __init__(self):
+        super().__init__()
         self.path = 'samples/KAZOO.wav'
         self.duration = 6
         self.last_trig = time.perf_counter()
-        self.players = [0 for i in range(8)]
+        self.players = [0 for _ in range(8)]
 
     def play(self):
         if time.perf_counter() - self.last_trig > self.duration:
@@ -99,12 +98,14 @@ class SamplePlant4():
             self.players.pop(0)
             self.last_trig = time.perf_counter()
 
-class SamplePlant5():
+
+class SamplePlant5(Plant):
     def __init__(self):
+        super().__init__()
         self.path = 'samples/london underground.wav'
         self.duration = 6
         self.last_trig = time.perf_counter()
-        self.players = [0 for i in range(8)]
+        self.players = [0 for _ in range(8)]
 
     def play(self):
         if time.perf_counter() - self.last_trig > self.duration:
