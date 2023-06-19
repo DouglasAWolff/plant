@@ -1,9 +1,4 @@
-
-pyo==1.0.5      # http://ajaxsoundstudio.com/software/pyo/
-# pyserial==3.5   # https://pyserial.readthedocs.io/en/latest/index.html
-
-# pip~=22.0.4
-pyserial~=3.5
-# setuptools~=56.0.0
-
-python-dotenv==1.0.0
+pyo==1.0.5              # http://ajaxsoundstudio.com/software/pyo/
+pyserial==3.5           # https://pyserial.readthedocs.io/en/latest/index.html
+pyserial-asyncio==0.6   # https://pyserial-asyncio.readthedocs.io/en/latest/
+python-dotenv==1.0.0    # https://pypi.org/project/python-dotenv/
