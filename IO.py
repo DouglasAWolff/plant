@@ -81,15 +81,18 @@ try:
             print(traceback.format_exc())
             time.sleep(0.05)
         if inp1 == 4:
+            sample_plant4.update_sample()
             sample_plant4.play()
             zcount[3] = 0
 
         elif inp1 == 5:
+            sample_plant5.update_sample()
             sample_plant5.play()
             zcount[4] = 0
 
         elif inp1 == 6:
-            plant2.play()
+            sample_plant6.update_sample()
+            sample_plant6.play()
             zcount[5] = 0
 
 finally:

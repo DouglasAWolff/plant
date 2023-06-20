@@ -53,12 +53,12 @@ class PlantsFourToSixOutputProtocol(asyncio.Protocol):
         self._transport = None
         self.sample_plant4 = None  # sample_plant4
         self.sample_plant5 = None  # sample_plant5
-        self.plant6 = None  # plant6
+        self.sample_plant6 = None  # sample_plant6
 
-    def set_plants(self, sample_plant4, sample_plant5, plant6):
+    def set_plants(self, sample_plant4, sample_plant5, sample_plant6):
         self.sample_plant4 = sample_plant4
         self.sample_plant5 = sample_plant5
-        self.plant6 = plant6
+        self.sample_plant6 = sample_plant6
 
     def connection_made(self, _transport):
         self._transport = _transport
@@ -71,13 +71,16 @@ class PlantsFourToSixOutputProtocol(asyncio.Protocol):
             print('[4-6] data received', ppreinp)
             inp = int(preinp) if len(preinp) > 0 else 0
             if inp == 4:
+                self.sample_plant4.update_sample()
                 self.sample_plant4.play()
 
             elif inp == 5:
+                self.sample_plant5.update_sample()
                 self.sample_plant5.play()
 
             elif inp == 6:
-                self.plant6.play()
+                self.sample_plant6.update_sample()
+                self.sample_plant6.play()
 
     def connection_lost(self, exc):
         print('[4-6] port closed')

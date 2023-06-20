@@ -3,7 +3,7 @@ from os import environ as env
 from dotenv import load_dotenv
 from pyo import *
 
-from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5
+from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5, SamplePlant6
 from plant_lib.async_protocols import PlantsOneToThreeOutputProtocol, PlantsFourToSixOutputProtocol
 
 from serial_asyncio import create_serial_connection
@@ -27,9 +27,7 @@ if __name__ == '__main__':
     tritone_plant3 = TritonePlant3()
     sample_plant4 = SamplePlant4()
     sample_plant5 = SamplePlant5()
-
-    # new class needed for plant 6
-    plant6 = Plant2()
+    sample_plant6 = SamplePlant6()
 
     ################################################################################
     #                                main loop                                     #
@@ -47,7 +45,7 @@ if __name__ == '__main__':
     transport, protocol = loop.run_until_complete(coro)
     transport1, protocol1 = loop.run_until_complete(coro1)
     protocol.set_plants(plant1, plant2, tritone_plant3)
-    protocol1.set_plants(sample_plant4, sample_plant5, plant6)
+    protocol1.set_plants(sample_plant4, sample_plant5, sample_plant6)
 
     loop.run_forever()
     loop.close()
