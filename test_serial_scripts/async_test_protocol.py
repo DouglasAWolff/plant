@@ -11,5 +11,4 @@ class ArduinoOutputProtocol(asyncio.Protocol):
         print("Connection made")
 
     def send_data(self, data):
-        print("Connection lost")
         self._transport.write(data)
