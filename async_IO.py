@@ -9,7 +9,7 @@ from plant_lib.async_protocols import PlantsOneToThreeOutputProtocol, PlantsFour
 from serial_asyncio import create_serial_connection
 
 
-# test
+# Run this file to start the plant server.
 if __name__ == '__main__':
     load_dotenv()  # take environment variables from .env file.
     ################################################################################

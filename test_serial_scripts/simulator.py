@@ -1,39 +1,47 @@
-"""
-Simulate a Plant server.
+import asyncio
+from dotenv import load_dotenv
+import random
+import time
+from os import environ as env
+from serial_asyncio import create_serial_connection
+from async_test_protocol import ArduinoOutputProtocol
 
 
-Usage:
+async def task_play(_transport, _protocol, _plant_number):
+    while True:
+        print("Playing", time.perf_counter())
 
-    python simulator.py [addr]
+        _protocol.send_data(f"{_plant_number}\n".encode())
+        sleep_time = random.random() * 10 + 3
+        print(f"Sleeping for {sleep_time} seconds")
+        await asyncio.sleep(random.random() * sleep_time)
 
-    addr: serial port address (default: /tmp/plant_simulator)
 
-Example:
+if __name__ == '__main__':
+    load_dotenv()  # take environment variables from .env file.
 
-    python simulator.py /tmp/plant_simulator
+    # NB these will never be used in production. Just making this configurable for testing purposes
+    ser_port = env.get('FAKE_ARDUINO_SERIAL_PORT', '/tmp/plant_S0')
+    ser_baudrate = env.get('FAKE_ARDUINO_SERIAL_BAUDRATE', 115200)
 
-Reads from the serial port in infinite loop and prints the response.
+    ser1_port = env.get('FAKE_ARDUINO_SERIAL1_PORT', '/tmp/plant_ACM1')
+    ser1_baudrate = env.get('FAKE_ARDUINO_SERIAL1_BAUDRATE', 115200)
 
-"""
+    tasks = [task_play] * 6
 
-import sys
-import logging
+    loop = asyncio.get_event_loop()
+    coro = create_serial_connection(loop, ArduinoOutputProtocol, ser_port, baudrate=ser_baudrate)
+    coro1 = create_serial_connection(loop, ArduinoOutputProtocol, ser1_port, baudrate=ser1_baudrate)
+    transport_1_2_3, protocol_1_2_3 = loop.run_until_complete(coro)
+    transport_4_5_6, protocol_4_5_6 = loop.run_until_complete(coro1)
 
-import serial
+    for idx, x in enumerate(tasks):
+        _task = tasks[idx]
+        plant_number = idx + 1
+        if plant_number < 4:
+            loop.create_task(_task(transport_1_2_3, protocol_1_2_3, plant_number))
+        else:
+            loop.create_task(_task(transport_4_5_6, protocol_4_5_6, plant_number))
 
-DEFAULT_ADDR = '/tmp/plant_simulator'
-
-logging.basicConfig(level=logging.INFO)
-
-addr = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_ADDR
-
-conn = serial.serial_for_url(addr)
-logging.info(f'Ready to receive requests on {addr}')
-while True:
-    request = conn.readline()
-    logging.info('REQ: %r', request)
-    request = request.strip().decode().lower()
-    reply = 'Cryo-con,24C,305682,1.05A\n' if request == '*idn?' else 'NACK\n'
-    reply = reply.encode()
-    logging.info('REP: %r', reply)
-    conn.write(reply)
+    loop.run_forever()
+    loop.close()

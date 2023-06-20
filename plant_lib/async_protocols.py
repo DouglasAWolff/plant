@@ -19,11 +19,10 @@ class PlantsOneToThreeOutputProtocol(asyncio.Protocol):
         print('[1-3] port opened', self._transport)
 
     def data_received(self, data):
-        print('[1-3] data received', repr(data))
         if b'\n' in data:
-            print('[1-3] data received included linebreak')  # so do something
             ppreinp = data.decode('utf-8')
             preinp = ppreinp.replace("\0", "").replace("\n", "").replace("\r", "")
+            print(f'[1-3] data received {ppreinp}')  # so do something
             inp = int(preinp) if len(preinp) > 0 else 0
             if inp == 1:
                 self.plant1.play()
@@ -66,11 +65,10 @@ class PlantsFourToSixOutputProtocol(asyncio.Protocol):
         print('[4-6] port opened', self._transport)
 
     def data_received(self, data):
-        print('[4-6] data received', repr(data))
         if b'\n' in data:
-            print('[4-6] data received included linebreak')
             ppreinp = data.decode('utf-8')
             preinp = ppreinp.replace("\0", "").replace("\n", "").replace("\r", "")
+            print('[4-6] data received', ppreinp)
             inp = int(preinp) if len(preinp) > 0 else 0
             if inp == 4:
                 self.sample_plant4.play()
