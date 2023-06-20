@@ -27,9 +27,19 @@ $ python IO.py
 To stop - CTRL + C (or pull the plug)
 
 
-### Troubleshooting / Debugging IO.py
+### Run async_IO.py
 
-To run test setup:
+There is an async version, which doesn't wait for serial port connections, it awaits them instead, which reduces the time spent waiting for the serial port to respond, and makes the playing of sound more responsive.
+
+```bash
+$ source venv/bin/activate
+$ python async_IO.py
+```
+To stop - CTRL + C (or pull the plug)
+
+## Troubleshooting / Debugging IO.py
+
+### Setup
 
 Install [`socat`](http://www.dest-unreach.org/socat/)) locally (via `brew` or `apt-get`)
 
@@ -56,6 +66,9 @@ Some example output:
 
 This creates two pseudo terminals (pty) `/tmp/plant_simulator_S0` and `/tmp/plant_simulator_ACM1`, which are used by `IO.py` (as with the true serial connections) to receive input from the arduino collecting capacitance data about the plants with sensors in the soil.
 
+
+### Testing a single plant
+
 To test a plant, run the following in a third terminal:
 ```bash
 $ python test_serial_scripts/client.py /tmp/plant_S0 2
@@ -69,3 +82,12 @@ $ python test_serial_scripts/client.py /tmp/plant_S0 2
 ```bash
 $ python test_serial_scripts/client.py /tmp/plant_ACM1 5
 ```
+
+### Running the test simulator
+
+To run the test simulator, run the following in a third terminal:
+```bash
+$ python test_serial_scripts/simulator.py
+```
+
+
