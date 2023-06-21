@@ -5,7 +5,7 @@ import serial
 from dotenv import load_dotenv
 from pyo import *
 
-from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5
+from plant_lib import Plant1, Plant2, PlantServer, TritonePlant3, SamplePlant4, SamplePlant5, SamplePlant6
 
 load_dotenv()  # take environment variables from .env.
 
@@ -24,6 +24,7 @@ plant2 = Plant2()
 tritone_plant3 = TritonePlant3()
 sample_plant4 = SamplePlant4()
 sample_plant5 = SamplePlant5()
+sample_plant6 = SamplePlant6()
 
 
 ################################################################################
