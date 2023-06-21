@@ -17,7 +17,7 @@ subs_sample_list = [
 texture_sample_list = [
     "texture 1 ap 6_17.wav",
     "texture 10 em 8_30.wav",
-    "texture 11 em 10_09.wav"
+    "texture 11 em 10_09.wav",
     "texture 12 es 2_07.wav",
     "texture 13 es 3_57.wav",
     "texture 14 es 8_31.wav",
